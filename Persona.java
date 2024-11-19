@@ -1,10 +1,17 @@
+import java.time.LocalDate;
+import java.time.Period;
+import java.time.format.DateTimeFormatter;
+
 public class Persona {
     // Atributos protegidos
-    protected String id; // Identificador de la persona
+    protected String id;
     protected String nombre;
     protected String domicilio;
-    protected String fechaDeNacimiento;
-    protected Character sexo; // Clases wrapper para tipos primitivos
+    protected LocalDate fechaDeNacimiento; // Usando LocalDate para manejar fechas
+    protected Character sexo;
+
+    // Crear un formatter para el formato dd/MM/yyyy
+    protected static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
 
     // Constructor vacío
     public Persona() {}
@@ -14,8 +21,9 @@ public class Persona {
         this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;
-        this.fechaDeNacimiento = fechaDeNacimiento;
         this.sexo = sexo;
+        // Convertir la cadena fechaDeNacimiento a LocalDate usando el formato dd/MM/yyyy
+        this.fechaDeNacimiento = LocalDate.parse(fechaDeNacimiento, FORMATO_FECHA);
     }
 
     // Getters
@@ -31,7 +39,7 @@ public class Persona {
         return domicilio;
     }
 
-    public String getFechaDeNacimiento() {
+    public LocalDate getFechaDeNacimiento() {
         return fechaDeNacimiento;
     }
 
@@ -52,7 +60,7 @@ public class Persona {
         this.domicilio = domicilio;
     }
 
-    public void setFechaDeNacimiento(String fechaDeNacimiento) {
+    public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
@@ -60,19 +68,17 @@ public class Persona {
         this.sexo = sexo;
     }
 
+    // Metodo para calcular la edad de la persona
+    public int calcularEdad() {
+        LocalDate hoy = LocalDate.now();
+        Period periodo = Period.between(fechaDeNacimiento, hoy);
+        return periodo.getYears();
+    }
+
     // Metodo para obtener información
     public String obtenerInformacion() {
         return "ID: " + id + "\nNombre: " + nombre + "\nDomicilio: " + domicilio +
-                "\nFecha de Nacimiento: " + fechaDeNacimiento + "\nSexo: " + sexo;
-    }
-
-    // Metodo para modificar datos
-    public void modificarDatos(String id, String nombre, String domicilio, String fechaDeNacimiento, Character sexo) {
-        this.id = id;
-        this.nombre = nombre;
-        this.domicilio = domicilio;
-        this.fechaDeNacimiento = fechaDeNacimiento;
-        this.sexo = sexo;
+                "\nFecha de Nacimiento: " + fechaDeNacimiento.format(FORMATO_FECHA) + "\nSexo: " + sexo;
     }
 
     // Metodo toString
@@ -82,7 +88,7 @@ public class Persona {
                 "ID='" + id + '\'' +
                 ", Nombre='" + nombre + '\'' +
                 ", Domicilio='" + domicilio + '\'' +
-                ", FechaDeNacimiento='" + fechaDeNacimiento + '\'' +
+                ", FechaDeNacimiento=" + fechaDeNacimiento.format(FORMATO_FECHA) +
                 ", Sexo=" + sexo +
                 '}';
     }
