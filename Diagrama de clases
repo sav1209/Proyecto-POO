@@ -1,0 +1,10 @@
+// Clase abstracta
+abstract class Aeropuerto {
+  protected String nombre; 
+  protected String ubicacion;
+  
+  public Aeropuerto (String nombre,String ubicacion) {
+    this.nombre = nombre;
+    this.ubicacion = ubicacion;
+  }
+}
