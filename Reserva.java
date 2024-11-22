@@ -1,5 +1,5 @@
 public class Reserva<T> {
-    private T itemReservado;
+    private T itemReservado; // Puede ser un Asiento, un Vuelo, etc.
     private Pasajero pasajero;
 
     public Reserva(T itemReservado, Pasajero pasajero) {
@@ -16,6 +16,7 @@ public class Reserva<T> {
     }
 
     public void realizarReserva() {
-        System.out.println("Reserva realizada para: " + pasajero.getNombre() + " en " + itemReservado.toString());
+        System.out.println("Reserva realizada para: " + pasajero.getNombre() +
+                "\nDetalles del ítem reservado: " + itemReservado.toString());
     }
 }
