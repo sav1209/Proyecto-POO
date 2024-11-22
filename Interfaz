@@ -1,0 +1,7 @@
+public interface Entidad {
+    Object[] getColumns(); // Devuelve los valores de las columnas como array.
+    String getId(); // Devuelve el identificador único de la entidad.
+    String getPrnHdrs(); // Devuelve las cabeceras de impresión.
+    void print(); // Imprime los valores de la entidad.
+    void update(Object[] nuevosValores); // Actualiza la entidad con nuevos valores.
+}
