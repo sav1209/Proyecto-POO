@@ -1,17 +1,15 @@
 public class Vuelo {
     private String codigoVuelo;
-    private Aeropuerto origen;
-    private Aeropuerto destino;
+    private Aeropuerto destino; // El origen es implícito, siempre es el AeropuertoPrincipal
 
-    public Vuelo(String codigoVuelo, Aeropuerto origen, Aeropuerto destino) {
+    public Vuelo(String codigoVuelo, Aeropuerto destino) {
         this.codigoVuelo = codigoVuelo;
-        this.origen = origen;
         this.destino = destino;
-        // Agregar el vuelo a la lista de vuelos del aeropuerto de origen
-        origen.agregarVuelo(this);
+        // Aquí no es necesario definir origen, ya que siempre es Aeropuerto.AEROPUERTO_PRINCIPAL
+        Aeropuerto.AEROPUERTO_PRINCIPAL.agregarVuelo(this);
     }
 
-    // Métodos Getters y Setters
+    // Getter y Setter para el código de vuelo
     public String getCodigoVuelo() {
         return codigoVuelo;
     }
@@ -20,14 +18,7 @@ public class Vuelo {
         this.codigoVuelo = codigoVuelo;
     }
 
-    public Aeropuerto getOrigen() {
-        return origen;
-    }
-
-    public void setOrigen(Aeropuerto origen) {
-        this.origen = origen;
-    }
-
+    // Getter y Setter para el destino
     public Aeropuerto getDestino() {
         return destino;
     }
@@ -40,7 +31,6 @@ public class Vuelo {
     public String toString() {
         return "Vuelo{" +
                 "codigoVuelo='" + codigoVuelo + '\'' +
-                ", origen=" + origen.getNombre() +
                 ", destino=" + destino.getNombre() +
                 '}';
     }

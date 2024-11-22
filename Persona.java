@@ -3,12 +3,16 @@ import java.time.Period;
 import java.time.format.DateTimeFormatter;
 
 public class Persona {
+    public enum Sexo {
+        MASCULINO, FEMENINO
+    }
+
     // Atributos protegidos
     protected String id;
     protected String nombre;
     protected String domicilio;
     protected LocalDate fechaDeNacimiento; // Usando LocalDate para manejar fechas
-    protected Character sexo;
+    protected Sexo sexo;
 
     // Crear un formatter para el formato dd/MM/yyyy
     protected static final DateTimeFormatter FORMATO_FECHA = DateTimeFormatter.ofPattern("dd/MM/yyyy");
@@ -17,13 +21,16 @@ public class Persona {
     public Persona() {}
 
     // Constructor con parámetros
-    public Persona(String id, String nombre, String domicilio, String fechaDeNacimiento, Character sexo) {
+    public Persona(String id, String nombre, String domicilio, String fechaDeNacimiento, Sexo sexo) {
         this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;
         this.sexo = sexo;
         // Convertir la cadena fechaDeNacimiento a LocalDate usando el formato dd/MM/yyyy
         this.fechaDeNacimiento = LocalDate.parse(fechaDeNacimiento, FORMATO_FECHA);
+        if (this.fechaDeNacimiento.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede estar en el futuro.");
+        }
     }
 
     // Getters
@@ -43,36 +50,59 @@ public class Persona {
         return fechaDeNacimiento;
     }
 
-    public Character getSexo() {
+    public Sexo getSexo() {
         return sexo;
     }
 
     // Setters
     public void setId(String id) {
-        this.id = id;
+        if (id != null && !id.trim().isEmpty()) {
+            this.id = id;
+        } else {
+            throw new IllegalArgumentException("ID no puede ser nulo o vacío.");
+        }
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        if (nombre != null && !nombre.trim().isEmpty()) {
+            this.nombre = nombre;
+        } else {
+            throw new IllegalArgumentException("Nombre no puede ser nulo o vacío.");
+        }
     }
 
     public void setDomicilio(String domicilio) {
-        this.domicilio = domicilio;
+        if (domicilio != null && !domicilio.trim().isEmpty()) {
+            this.domicilio = domicilio;
+        } else {
+            throw new IllegalArgumentException("Domicilio no puede ser nulo o vacío.");
+        }
     }
 
     public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
+        if (fechaDeNacimiento == null) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
+        }
+        if (fechaDeNacimiento.isAfter(LocalDate.now())) {
+            throw new IllegalArgumentException("La fecha de nacimiento no puede estar en el futuro.");
+        }
         this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    public void setSexo(Character sexo) {
+    public void setSexo(Sexo sexo) {
+        if (sexo == null) {
+            throw new IllegalArgumentException("Sexo no puede ser nulo.");
+        }
         this.sexo = sexo;
     }
 
     // Metodo para calcular la edad de la persona
     public int calcularEdad() {
+        if (fechaDeNacimiento == null) {
+            throw new IllegalStateException("La fecha de nacimiento no está definida.");
+        }
         LocalDate hoy = LocalDate.now();
-        Period periodo = Period.between(fechaDeNacimiento, hoy);
-        return periodo.getYears();
+        return Period.between(fechaDeNacimiento, hoy).getYears();
     }
 
     // Metodo para obtener información

@@ -1,15 +1,29 @@
 public class Empleado extends Persona {
+
+    // Enumeración para los diferentes roles en el aeropuerto
+    public enum Puesto {
+        PILOTO,
+        AZAFATA,
+        PERSONAL_DE_TIERRA,
+        MANTENIMIENTO,
+        ADMINISTRATIVO
+    }
+
+    public enum Turno {
+        PRIMERO, SEGUNDO, TERCERO
+    }
+
     // Atributos específicos de Empleado
-    private String puesto;
-    private String turno; // Atributo actualizado
-    private Double sueldo; // Sueldo fijo mensual
+    private Puesto puesto;  // Cambio de tipo String a Puesto (enumeración)
+    private Turno turno;
+    private Double sueldo;
 
     // Constructor vacío
     public Empleado() {}
 
     // Constructor con parámetros
-    public Empleado(String id, String nombre, String domicilio, String fechaDeNacimiento, Character sexo,
-                    String puesto, String turno, Double sueldo) {
+    public Empleado(String id, String nombre, String domicilio, String fechaDeNacimiento, Sexo sexo,
+                    Puesto puesto, Turno turno, Double sueldo) {
         super(id, nombre, domicilio, fechaDeNacimiento, sexo);
         this.puesto = puesto;
         this.turno = turno;
@@ -17,11 +31,11 @@ public class Empleado extends Persona {
     }
 
     // Getters
-    public String getPuesto() {
+    public Puesto getPuesto() {
         return puesto;
     }
 
-    public String getTurno() {
+    public Turno getTurno() {
         return turno;
     }
 
@@ -30,19 +44,31 @@ public class Empleado extends Persona {
     }
 
     // Setters
-    public void setPuesto(String puesto) {
-        this.puesto = puesto;
+    public void setPuesto(Puesto puesto) {
+        if (puesto != null) {
+            this.puesto = puesto;
+        } else {
+            throw new IllegalArgumentException("El puesto no puede ser nulo.");
+        }
     }
 
-    public void setTurno(String turno) {
-        this.turno = turno;
+    public void setTurno(Turno turno) {
+        if (turno != null) {
+            this.turno = turno;
+        } else {
+            throw new IllegalArgumentException("El turno no puede ser nulo.");
+        }
     }
 
     public void setSueldo(Double sueldo) {
-        this.sueldo = sueldo;
+        if (sueldo != null && sueldo >= 0) {
+            this.sueldo = sueldo;
+        } else {
+            throw new IllegalArgumentException("El sueldo debe ser mayor o igual a 0.");
+        }
     }
 
-    // Metodo toString
+    // Método toString
     @Override
     public String toString() {
         return "Empleado {" +
@@ -51,9 +77,14 @@ public class Empleado extends Persona {
                 ", Domicilio='" + domicilio + '\'' +
                 ", FechaDeNacimiento=" + fechaDeNacimiento.format(FORMATO_FECHA) +
                 ", Sexo=" + sexo +
-                ", Puesto='" + puesto + '\'' +
+                ", Puesto='" + puesto + '\'' + // Representación del puesto
                 ", Turno='" + turno + '\'' +
                 ", Sueldo=" + sueldo +
                 '}';
     }
+
+    public String obtenerInformacionEmpleado() {
+        return "Puesto: " + puesto + "\nTurno: " + turno + "\nSueldo: " + sueldo;
+    }
+
 }
