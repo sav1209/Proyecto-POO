@@ -2,10 +2,16 @@ public class Pasajero extends Persona {
 
     // Atributos adicionales para Pasajero
     private String numeroPasaporte;
-    private String asientoAsignado;
+    private Asiento asientoAsignado;
 
     // Constructor
-    public Pasajero(String id, String nombre, String domicilio, String fechaDeNacimiento, Sexo sexo, String numeroPasaporte, String asientoAsignado) {
+    public Pasajero(String id, String nombre, String domicilio, String fechaDeNacimiento, char sexo, String numeroPasaporte) {
+        super(id, nombre, domicilio, fechaDeNacimiento, sexo);
+        this.numeroPasaporte = numeroPasaporte;
+        this.asientoAsignado = null;
+    }
+
+    public Pasajero(String id, String nombre, String domicilio, String fechaDeNacimiento, char sexo, String numeroPasaporte, Asiento asientoAsignado) {
         super(id, nombre, domicilio, fechaDeNacimiento, sexo);
         this.numeroPasaporte = numeroPasaporte;
         this.asientoAsignado = asientoAsignado;
@@ -16,13 +22,15 @@ public class Pasajero extends Persona {
         return numeroPasaporte;
     }
 
-    public String getAsientoAsignado() {
+    public Asiento getAsientoAsignado() {
         return asientoAsignado;
     }
 
     // Método para obtener información del pasajero
     public String obtenerInformacionPasajero() {
-        return "Nombre: " + getNombre() + "\nNúmero de Pasaporte: " + numeroPasaporte + "\nAsiento Asignado: " + asientoAsignado;
+        return "Nombre: " + getNombre() +
+                "\nNúmero de Pasaporte: " + numeroPasaporte +
+                "\nAsiento Asignado: " + (asientoAsignado != null ? asientoAsignado.toString() : "No asignado");
     }
 
     @Override
@@ -34,7 +42,7 @@ public class Pasajero extends Persona {
                 ", FechaDeNacimiento=" + getFechaDeNacimiento().format(FORMATO_FECHA) +
                 ", Sexo=" + getSexo() +
                 ", Número de Pasaporte='" + numeroPasaporte + '\'' +
-                ", Asiento Asignado='" + asientoAsignado + '\'' +
+                ", Asiento Asignado=" + (asientoAsignado != null ? asientoAsignado.toString() : "No asignado") +
                 '}';
     }
 }

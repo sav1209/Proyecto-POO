@@ -2,10 +2,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Aeropuerto {
+    public static final Aeropuerto AEROPUERTO_PRINCIPAL = new Aeropuerto("Aeropuerto Internacional MAC", "Estado de México");
+
     private String nombre;
     private String ubicacion;
     private List<Vuelo> vuelosOrigen; // Lista de vuelos que parten de este aeropuerto
-    public static final Aeropuerto AEROPUERTO_PRINCIPAL = new Aeropuerto("Aeropuerto Internacional", "Ciudad de México");
 
     public Aeropuerto(String nombre, String ubicacion) {
         this.nombre = nombre;

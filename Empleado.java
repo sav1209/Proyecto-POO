@@ -22,7 +22,7 @@ public class Empleado extends Persona {
     public Empleado() {}
 
     // Constructor con parámetros
-    public Empleado(String id, String nombre, String domicilio, String fechaDeNacimiento, Sexo sexo,
+    public Empleado(String id, String nombre, String domicilio, String fechaDeNacimiento, char sexo,
                     Puesto puesto, Turno turno, Double sueldo) {
         super(id, nombre, domicilio, fechaDeNacimiento, sexo);
         this.puesto = puesto;

@@ -6,11 +6,13 @@ public class Asiento {
     }
 
     private String codigoAsiento;
-    private ClaseAsiento clase; // Ejemplo: Económica, Ejecutiva, Primera Clase
+    private ClaseAsiento clase;
+    private boolean ocupado; // Indica si el asiento está reservado
 
-    public Asiento(String codigoAsiento, ClaseAsiento clase) {
+    public Asiento(String codigoAsiento, ClaseAsiento clase, boolean ocupado) {
         this.codigoAsiento = codigoAsiento;
         this.clase = clase;
+        this.ocupado = ocupado;
     }
 
     public String getCodigoAsiento() {
@@ -21,11 +23,20 @@ public class Asiento {
         return clase;
     }
 
+    public boolean isOcupado() {
+        return ocupado;
+    }
+
+    public void setOcupado(boolean ocupado) {
+        this.ocupado = ocupado;
+    }
+
     @Override
     public String toString() {
         return "Asiento{" +
                 "Código='" + codigoAsiento + '\'' +
                 ", Clase='" + clase + '\'' +
+                ", Ocupado=" + ocupado +
                 '}';
     }
 }

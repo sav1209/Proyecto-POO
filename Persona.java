@@ -21,11 +21,14 @@ public class Persona {
     public Persona() {}
 
     // Constructor con parámetros
-    public Persona(String id, String nombre, String domicilio, String fechaDeNacimiento, Sexo sexo) {
+    public Persona(String id, String nombre, String domicilio, String fechaDeNacimiento, char sexo) {
         this.id = id;
         this.nombre = nombre;
         this.domicilio = domicilio;
-        this.sexo = sexo;
+        switch(sexo) {
+            case 'm': this.sexo = Sexo.MASCULINO; break;
+            case 'f': this.sexo = Sexo.FEMENINO; break;
+        }
         // Convertir la cadena fechaDeNacimiento a LocalDate usando el formato dd/MM/yyyy
         this.fechaDeNacimiento = LocalDate.parse(fechaDeNacimiento, FORMATO_FECHA);
         if (this.fechaDeNacimiento.isAfter(LocalDate.now())) {
