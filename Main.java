@@ -270,6 +270,8 @@ public class Main {
                     vuelos.printAll();
                     break;
                 case 6:
+                    System.out.println("Vuelos actuales");
+                    vuelos.printAll();
                     System.out.print("Ingrese el ID del vuelo: ");
                     String id = scanner.nextLine();
                     Vuelo vueloEncontrado = vuelos.find(id).orElse(null); // Si no se encuentra, retorna null

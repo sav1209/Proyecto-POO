@@ -171,13 +171,13 @@ public class Vuelo implements Administrable {
 
     @Override
     public void print() {
-        System.out.printf("%-5s %-30s %-10s %-20s %-20s\n",
+        System.out.printf("%-5s %-50s %-10s %-20s %-20s\n",
                 id, destino.getNombre(), avion.getId(), horaSalida.format(formatter), horaLlegada.format(formatter)
         );
     }
 
     public static void printHdrs() {
-        System.out.printf("%-5s %-30s %-10s %-20s %-20s\n",
+        System.out.printf("%-5s %-50s %-10s %-20s %-20s\n",
             "ID", "DESTINO", "AVION", "HORARIO SALIDA", "HORARIO LLEGADA"
         );
     }
