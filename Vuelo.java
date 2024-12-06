@@ -1,17 +1,28 @@
+import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 import java.time.temporal.ChronoUnit;
+import java.util.ArrayList;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Vuelo implements Administrable {
-    private String codigoVuelo;
+    // Variable estática para generar IDs únicos automáticamente
+    private static final AtomicInteger contadorId = new AtomicInteger(1);
+
+    private static final DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd/MM/yyyy HH:mm");
+    private String id;
     private Aeropuerto destino; // El origen es implícito, siempre es Aeropuerto.AEROPUERTO_PRINCIPAL
     private Avion avion; // Avión asignado al vuelo
     private LocalDateTime horaSalida; // Hora de salida del vuelo
     private LocalDateTime horaLlegada; // Hora de llegada del vuelo
+    private ArrayList<Pasajero> pasajeros = new ArrayList<>();
 
     // Constructor
-    public Vuelo(String codigoVuelo, Aeropuerto destino, Avion avion, String horaSalida, String horaLlegada) {
-        this.codigoVuelo = codigoVuelo;
+    public Vuelo(Aeropuerto destino, Avion avion, String horaSalida, String horaLlegada) {
+        this.id = "VUE" + contadorId.getAndIncrement(); // Generación automática del ID;
+
         this.destino = destino;
         this.avion = avion;
 
@@ -26,14 +37,10 @@ public class Vuelo implements Administrable {
 
         this.horaSalida = salida;
         this.horaLlegada = llegada;
-
-        // Asocia el vuelo al aeropuerto principal
-        Aeropuerto.AEROPUERTO_PRINCIPAL.agregarVuelo(this);
     }
 
     // Método para convertir el String en LocalDateTime
     private LocalDateTime convertirStringAHora(String hora) {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return LocalDateTime.parse(hora, formatter);
     }
 
@@ -61,12 +68,12 @@ public class Vuelo implements Administrable {
     }
 
     // Getter y Setter para el código de vuelo
-    public String getCodigoVuelo() {
-        return codigoVuelo;
+    public String getId() {
+        return id;
     }
 
-    public void setCodigoVuelo(String codigoVuelo) {
-        this.codigoVuelo = codigoVuelo;
+    public void setId(String codigoVuelo) {
+        this.id = codigoVuelo;
     }
 
     // Getter y Setter para el destino
@@ -92,8 +99,24 @@ public class Vuelo implements Administrable {
         return horaSalida;
     }
 
-    public void setHoraSalida(LocalDateTime horaSalida) {
-        this.horaSalida = horaSalida;
+    public void setHoraSalida(String horario) {
+        try {
+            // Intentar parsear el horario con el formato especificado
+            LocalDateTime nuevaHoraSalida = LocalDateTime.parse(horario, formatter);
+
+            // Validar que la hora de salida no sea en el pasado
+            if (nuevaHoraSalida.isBefore(LocalDateTime.now())) {
+                System.out.println("El horario no puede estar en el pasado.");
+                return;
+            }
+
+            // Actualizar el atributo si el horario es válido
+            this.horaSalida = nuevaHoraSalida;
+            System.out.println("Horario actualizado correctamente.");
+        } catch (DateTimeParseException e) {
+            // Capturar errores de formato
+            System.out.println("Horario inválido. Por favor, use el formato 'dd/MM/yyyy HH:mm'.");
+        }
     }
 
     // Getter y Setter para la hora de llegada
@@ -101,15 +124,30 @@ public class Vuelo implements Administrable {
         return horaLlegada;
     }
 
-    public void setHoraLlegada(LocalDateTime horaLlegada) {
-        this.horaLlegada = horaLlegada;
+    public void setHoraLlegada(String horario) {
+        try {
+            // Intentar parsear el horario con el formato especificado
+            LocalDateTime nuevaHoraLlegada = LocalDateTime.parse(horario, formatter);
+
+            // Validar que la hora de llegada sea posterior a la hora de salida
+            if (horaSalida != null && nuevaHoraLlegada.isBefore(horaSalida)) {
+                System.out.println("La hora de llegada no puede ser anterior a la hora de salida.");
+                return;
+            }
+
+            // Actualizar el atributo si el horario es válido
+            this.horaLlegada = nuevaHoraLlegada;
+            System.out.println("Hora de llegada actualizada correctamente.");
+        } catch (DateTimeParseException e) {
+            // Capturar errores de formato
+            System.out.println("Horario inválido. Por favor, use el formato 'dd/MM/yyyy HH:mm'.");
+        }
     }
 
     @Override
     public String toString() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
         return "Vuelo{" +
-                "codigoVuelo='" + codigoVuelo + '\'' +
+                "codigoVuelo='" + id + '\'' +
                 ", destino=" + destino.getNombre() +
                 ", avion=" + avion.getModelo() +
                 ", horaSalida=" + horaSalida.format(formatter) +
@@ -117,17 +155,61 @@ public class Vuelo implements Administrable {
                 '}';
     }
 
-    @Override
-    public void registrar() {
-        System.out.println("Registrando vuelo: " + codigoVuelo);
+    public ArrayList<Pasajero> getPasajeros() {
+        return pasajeros;
+    }
+
+    public void agregarPasajero(Pasajero p) {
+        pasajeros.add(p);
+    }
+
+    public void mostrarPasajeros() {
+        for (Pasajero p: pasajeros) {
+            System.out.println(p);
+        }
     }
 
     @Override
-    public String mostrarInformacion() {
-        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm");
-        return "Vuelo: " + codigoVuelo + "\nDestino: " + destino.getNombre() +
-                "\nAvión: " + avion.getModelo() +
-                "\nHora de salida: " + horaSalida.format(formatter) +
-                "\nHora de llegada: " + horaLlegada.format(formatter);
+    public void print() {
+        System.out.printf("%-5s %-30s %-10s %-20s %-20s\n",
+                id, destino.getNombre(), avion.getId(), horaSalida.format(formatter), horaLlegada.format(formatter)
+        );
+    }
+
+    public static void printHdrs() {
+        System.out.printf("%-5s %-30s %-10s %-20s %-20s\n",
+            "ID", "DESTINO", "AVION", "HORARIO SALIDA", "HORARIO LLEGADA"
+        );
+    }
+
+    public void update() {
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+        while (true) {
+            System.out.println("Atributos disponibles para actualizar");
+            System.out.println("1. Hora de salida");
+            System.out.println("2. Hora de llegada");
+            System.out.println("3. Salir de la actualizacion");
+            System.out.print("Opcion: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese el horario de salida (formato: dd/MM/yyyy HH:mm): ");
+                    setHoraSalida(scanner.nextLine());
+                    scanner.nextLine();
+                    break;
+                case 2:
+                    System.out.print("Ingrese el horario de llegada (formato: dd/MM/yyyy HH:mm): ");
+                    setHoraLlegada(scanner.nextLine());
+                    break;
+                case 3:
+                    System.out.println("Saliendo de la actualización.");
+                    return;
+                default:
+                    System.out.println("Opción invalida, vuelva a intentar.");
+            }
+        }
     }
 }

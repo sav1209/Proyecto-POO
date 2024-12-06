@@ -5,18 +5,18 @@ public class Asiento {
         PRIMERA_CLASE
     }
 
-    private String codigoAsiento;
+    private String id;
     private ClaseAsiento clase;
     private boolean ocupado; // Indica si el asiento está reservado
 
-    public Asiento(String codigoAsiento, ClaseAsiento clase, boolean ocupado) {
-        this.codigoAsiento = codigoAsiento;
+    public Asiento(String id, ClaseAsiento clase, boolean ocupado) {
+        this.id = id;
         this.clase = clase;
         this.ocupado = ocupado;
     }
 
-    public String getCodigoAsiento() {
-        return codigoAsiento;
+    public String getId() {
+        return id;
     }
 
     public ClaseAsiento getClase() {
@@ -34,7 +34,7 @@ public class Asiento {
     @Override
     public String toString() {
         return "Asiento{" +
-                "Código='" + codigoAsiento + '\'' +
+                "Id='" + id + '\'' +
                 ", Clase='" + clase + '\'' +
                 ", Ocupado=" + ocupado +
                 '}';

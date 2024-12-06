@@ -1,4 +1,7 @@
+import java.util.ArrayList;
+
 public interface Administrable {
-    void registrar(); // Registrar la entidad en el sistema
-    String mostrarInformacion(); // Mostrar detalles de la entidad
+    void update();
+    void print(); // Mostrar detalles de una entidad para mostrarlo en una tabla
+    String getId(); // Método que debe implementar cualquier clase que se use en CrudService
 }

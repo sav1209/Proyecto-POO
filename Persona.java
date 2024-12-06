@@ -1,6 +1,7 @@
 import java.time.LocalDate;
 import java.time.Period;
 import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
 
 public class Persona {
     public enum Sexo {
@@ -26,8 +27,8 @@ public class Persona {
         this.nombre = nombre;
         this.domicilio = domicilio;
         switch(sexo) {
-            case 'm': this.sexo = Sexo.MASCULINO; break;
-            case 'f': this.sexo = Sexo.FEMENINO; break;
+            case 'M': this.sexo = Sexo.MASCULINO; break;
+            case 'F': this.sexo = Sexo.FEMENINO; break;
         }
         // Convertir la cadena fechaDeNacimiento a LocalDate usando el formato dd/MM/yyyy
         this.fechaDeNacimiento = LocalDate.parse(fechaDeNacimiento, FORMATO_FECHA);
@@ -82,21 +83,39 @@ public class Persona {
         }
     }
 
-    public void setFechaDeNacimiento(LocalDate fechaDeNacimiento) {
-        if (fechaDeNacimiento == null) {
-            throw new IllegalArgumentException("La fecha de nacimiento no puede ser nula.");
+    public void setFechaDeNacimiento(String fecha) {
+        try {
+            // Parsear la fecha y verificar que no sea en el futuro
+            LocalDate fechaParsed = LocalDate.parse(fecha, FORMATO_FECHA);
+            if (fechaParsed.isAfter(LocalDate.now())) {
+                throw new IllegalArgumentException("La fecha de nacimiento no puede estar en el futuro.");
+            }
+            this.fechaDeNacimiento = fechaParsed; // Asignar la fecha si es válida
+        } catch (DateTimeParseException e) {
+            System.out.println("Error: Formato de fecha inválido. Use el formato " + FORMATO_FECHA.toString());
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
         }
-        if (fechaDeNacimiento.isAfter(LocalDate.now())) {
-            throw new IllegalArgumentException("La fecha de nacimiento no puede estar en el futuro.");
-        }
-        this.fechaDeNacimiento = fechaDeNacimiento;
     }
 
-    public void setSexo(Sexo sexo) {
-        if (sexo == null) {
-            throw new IllegalArgumentException("Sexo no puede ser nulo.");
+    public void setSexo(char sexo) {
+        // Convertir el carácter a mayúsculas para que no sea case-sensitive
+        char sexoMayus = Character.toUpperCase(sexo);
+
+        // Determinar el valor de Sexo en función del carácter
+        switch (sexoMayus) {
+            case 'M':
+                this.sexo = Sexo.MASCULINO;
+                System.out.println("Sexo actualizado a Masculino.");
+                break;
+            case 'F':
+                this.sexo = Sexo.FEMENINO;
+                System.out.println("Sexo actualizado a Femenino.");
+                break;
+            default:
+                System.out.println("Entrada no válida. Sexo no actualizado. Use 'M' o 'F'.");
+                break;
         }
-        this.sexo = sexo;
     }
 
     // Metodo para calcular la edad de la persona

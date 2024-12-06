@@ -1,12 +1,17 @@
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Scanner;
+import java.util.concurrent.atomic.AtomicInteger;
 
 public class Avion extends MedioTransporte implements Administrable {
-    private int capacidad; // Capacidad total de pasajeros
-    private List<Asiento> asientos; // Lista de asientos disponibles en el avión
+    // Variable estática para generar IDs únicos automáticamente
+    private static final AtomicInteger contadorId = new AtomicInteger(1);
 
-    public Avion(String id, String modelo, int capacidad) {
-        super(id, modelo);
+    private int capacidad; // Capacidad total de pasajeros
+    private ArrayList<Asiento> asientos; // Lista de asientos disponibles en el avión
+
+    public Avion(String modelo, int capacidad) {
+        super("AVI" + contadorId.getAndIncrement(), modelo);
         this.capacidad = capacidad;
         this.asientos = generarAsientos(capacidad); // Genera los asientos al crear el avión
     }
@@ -17,8 +22,8 @@ public class Avion extends MedioTransporte implements Administrable {
     }
 
     // Método para generar una lista de asientos distribuidos por clases
-    private List<Asiento> generarAsientos(int capacidad) {
-        List<Asiento> asientos = new ArrayList<>();
+    private ArrayList<Asiento> generarAsientos(int capacidad) {
+        ArrayList<Asiento> asientos = new ArrayList<>();
         int primeraClase = capacidad / 10; // 10% de la capacidad
         int ejecutiva = capacidad / 5;    // 20% de la capacidad
         int economica = capacidad - primeraClase - ejecutiva; // Resto para clase económica
@@ -59,7 +64,13 @@ public class Avion extends MedioTransporte implements Administrable {
     }
 
     // Obtener la lista de asientos
-    public List<Asiento> getAsientos() {
+    public void desasignarAsientos() {
+        asientos.clear();
+        generarAsientos(capacidad);
+    }
+
+    // Obtener la lista de asientos
+    public ArrayList<Asiento> getAsientos() {
         return asientos;
     }
 
@@ -72,13 +83,53 @@ public class Avion extends MedioTransporte implements Administrable {
                 '}';
     }
 
+    // Sobrescribimos el método equals
     @Override
-    public void registrar() {
-        System.out.println("Registrando avión: " + modelo + " (ID: " + id + ")");
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Si es el mismo objeto, son iguales
+        if (obj == null || getClass() != obj.getClass()) return false; // Verifica que el objeto no sea nulo y sea de la misma clase
+        Avion avion = (Avion) obj; // Conversión segura
+        return id != null && id.equals(avion.id); // Compara los IDs
     }
 
-    @Override
-    public String mostrarInformacion() {
-        return "Avión: " + modelo + "\nID: " + id + "\nCapacidad: " + capacidad;
+    public void print() {
+        System.out.printf("%-5s %-15s %5d\n",
+            id, modelo, capacidad
+        );
+    }
+
+    public static void printHdrs() {
+        System.out.printf("%-5s %-15s %5s\n", "ID", "MODELO", "CAPACIDAD");
+    }
+
+    public void update() {
+        Scanner scanner = new Scanner(System.in);
+        int opcion;
+        while (true) {
+            System.out.println("Atributos disponibles para actualizar");
+            System.out.println("1. Capacidad");
+            System.out.println("2. Modelo");
+            System.out.println("3. Salir de la actualizacion");
+            System.out.print("Opcion: ");
+            opcion = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (opcion) {
+                case 1:
+                    System.out.print("Ingrese la capacidad: ");
+                    setCapacidad(scanner.nextInt());
+                    scanner.nextLine();
+                    break;
+                case 2:
+                    System.out.print("Ingrese el modelo: ");
+                    setModelo(scanner.nextLine());
+                    break;
+                case 3:
+                    System.out.println("Saliendo de la actualización.");
+                    return;
+                default:
+                    System.out.println("Opción invalida, vuelva a intentar.");
+            }
+        }
     }
 }

@@ -1,30 +1,27 @@
-import java.util.ArrayList;
-import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 
-public class Aeropuerto {
+public class Aeropuerto implements Administrable {
+    // Variable estática para generar IDs únicos automáticamente
+    private static final AtomicInteger contadorId = new AtomicInteger(1);
+
     public static final Aeropuerto AEROPUERTO_PRINCIPAL = new Aeropuerto("Aeropuerto Internacional MAC", "Estado de México");
 
+    private final String id; // Identificador único generado automáticamente
     private String nombre;
     private String ubicacion;
-    private List<Vuelo> vuelosOrigen; // Lista de vuelos que parten de este aeropuerto
 
+    // Constructor con parametros
     public Aeropuerto(String nombre, String ubicacion) {
+        this.id = "AER" + contadorId.getAndIncrement(); // Generación automática del ID
         this.nombre = nombre;
         this.ubicacion = ubicacion;
-        this.vuelosOrigen = new ArrayList<>();
     }
 
-    // Agregar un vuelo que parte de este aeropuerto
-    public void agregarVuelo(Vuelo vuelo) {
-        vuelosOrigen.add(vuelo);
+    // Métodos Getters (el ID no tendrá setter para mantener la unicidad)
+    public String getId() {
+        return id;
     }
 
-    // Obtener lista de vuelos que parten de este aeropuerto
-    public List<Vuelo> obtenerVuelos() {
-        return vuelosOrigen;
-    }
-
-    // Métodos Getters y Setters
     public String getNombre() {
         return nombre;
     }
@@ -41,11 +38,42 @@ public class Aeropuerto {
         this.ubicacion = ubicacion;
     }
 
+    // Sobrescribir equals para comparar solo el id
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) return true; // Comparación por referencia
+        if (obj == null || getClass() != obj.getClass()) return false; // Verificación de tipo
+        Aeropuerto that = (Aeropuerto) obj;
+        return id.equals(that.id); // Comparación de IDs
+    }
+
+    // Sobrescribir hashCode para consistencia con equals
+    @Override
+    public int hashCode() {
+        return id.hashCode();
+    }
+
+    // Método toString
     @Override
     public String toString() {
         return "Aeropuerto{" +
-                "nombre='" + nombre + '\'' +
+                "id='" + id + '\'' +
+                ", nombre='" + nombre + '\'' +
                 ", ubicacion='" + ubicacion + '\'' +
                 '}';
+    }
+
+    public void print() {
+        System.out.printf("%-5s %-50s %-15s\n",
+            id, nombre, ubicacion
+        );
+    }
+
+    public static void printHdrs() {
+        System.out.printf("%-5s %-50s %-15s\n", "ID", "NOMBRE", "UBICACION");
+    }
+
+    public void update() {
+
     }
 }
