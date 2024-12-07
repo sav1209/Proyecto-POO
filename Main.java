@@ -18,27 +18,42 @@ public class Main {
                 "Aeropuerto Internacional de la Ciudad de México",
                 "Ciudad de México"
         ));
-
         aeropuertosDestino.create(new Aeropuerto(
                 "Aeropuerto Internacional de Cancún",
                 "Cancún"
         ));
-
         aeropuertosDestino.create(new Aeropuerto(
                 "Aeropuerto Internacional de Monterrey",
                 "Monterrey"
         ));
-
         aeropuertosDestino.create(new Aeropuerto(
                 "Aeropuerto Internacional de Guadalajara",
                 "Guadalajara"
         ));
-
         aeropuertosDestino.create(new Aeropuerto(
                 "Aeropuerto Internacional de Los Ángeles",
                 "Los Ángeles"
         ));
-
+        aeropuertosDestino.create(new Aeropuerto(
+                "Aeropuerto Internacional de Tijuana",
+                "Tijuana"
+        ));
+        aeropuertosDestino.create(new Aeropuerto(
+                "Aeropuerto Internacional de Miami",
+                "Miami"
+        ));
+        aeropuertosDestino.create(new Aeropuerto(
+                "Aeropuerto Internacional de Houston",
+                "Houston"
+        ));
+        aeropuertosDestino.create(new Aeropuerto(
+                "Aeropuerto Internacional de Nueva York",
+                "Nueva York"
+        ));
+        aeropuertosDestino.create(new Aeropuerto(
+                "Aeropuerto Internacional de Mérida",
+                "Mérida"
+        ));
 
 
         // Aviones por defecto
@@ -510,14 +525,21 @@ public class Main {
         }
 
         ArrayList<Asiento> asientos = vueloEncontrado.getAvion().getAsientos();
+        boolean asientoEncontrado = false;
         for (int i = 0; i < asientos.size(); i++) {
             Asiento asiento = asientos.get(i);
             if (asiento.getClase() == tipoAsiento && (!asiento.isOcupado())) {
                 asiento.setOcupado(true);
+                asientoEncontrado = true;
                 pasajero.setAsientoAsignado(asiento);
                 System.out.println("Se le ha asignado el asiento " + asiento.getId() + " al pasajero");
                 break;
             }
+        }
+
+        if (!asientoEncontrado) {
+            System.out.println("No se encontró un asiento del tipo solicitado. El pasajero no se agregara al vuelo.");
+            return;
         }
 
         vueloEncontrado.agregarPasajero(pasajero);
